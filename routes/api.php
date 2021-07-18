@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\QrCodeController;
+use App\Http\Controllers\stokBarangController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -21,3 +22,4 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::get('/qrcode', [QrCodeController::class, 'index']);
 Route::post('/qrcode', [QrCodeController::class, 'store']);
+Route::post('/StokBarang', [stokBarangController::class, 'store']);

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateStokBarangsTable extends Migration
+class CreateNewListsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,11 @@ class CreateStokBarangsTable extends Migration
      */
     public function up()
     {
-        Schema::create('stok_barangs', function (Blueprint $table) {
+        Schema::create('new_lists', function (Blueprint $table) {
             $table->id();
-            $table->string('BarCode')->unique();
+            $table->string('Barcode');
             $table->string("NamaBarang");
-            $table->double("StokBarang");
-            $table->integer("HargaSatuan");
-            $table->string("Cobacoba");
+            $table->double("Harga");
             $table->timestamps();
         });
     }
@@ -31,6 +29,6 @@ class CreateStokBarangsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('stok_barangs');
+        Schema::dropIfExists('new_lists');
     }
 }

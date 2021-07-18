@@ -6,6 +6,8 @@ use App\Models\StokBarang;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
+use Illuminate\Validation\Rule;
 use Symfony\Component\HttpFoundation\Response;
 
 class stokBarangController extends Controller
@@ -39,14 +41,20 @@ class stokBarangController extends Controller
     public function store(Request $request)
     {
         $vallidator = Validator::make($request->all(), [
-            'BarCode' => ['required'], 'NamaBarang' => ['required'], 'StokBarang' => ['required'], 'HargaSatuan' => ['required'],
+            'BarCode' => ['required', 'unique:stok_barangs'], 'NamaBarang' => ['required'], 'StokBarang' => ['required'], 'HargaSatuan' => ['required'],
         ]);
         if ($vallidator->fails()) {
             return response()->json($vallidator->errors(), Response::HTTP_UNPROCESSABLE_ENTITY);
             # code...
         }
         try {
-            $qrcode = StokBarang::create($request->all());
+            $qrcode = StokBarang::create([
+                "BarCode" => $request->BarCode,
+                "NamaBarang" => $request->NamaBarang,
+                "StokBarang" => $request->StokBarang,
+                "HargaSatuan" => $request->HargaSatuan,
+                "Cobacoba" => Str::slug($request->NamaBarang, "-") . $request->StokBarang . '/' . Str::slug($request->BarCode, "-"),
+            ]);
             $response = [
                 'massage' => "Success",
                 "data" => $qrcode

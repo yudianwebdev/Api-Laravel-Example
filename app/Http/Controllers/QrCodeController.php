@@ -3,9 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Models\InputQRcode;
+use App\Models\newList;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
+use PHPUnit\Framework\Constraint\Count;
+use SebastianBergmann\CodeCoverage\Report\Xml\Totals;
 use Symfony\Component\HttpFoundation\Response;
 
 class QrCodeController extends Controller
@@ -17,10 +21,18 @@ class QrCodeController extends Controller
      */
     public function index()
     {
-        $qrcode = InputQRcode::orderBy('time', "DESC")->get();
+        $TotalHarga = DB::table('new_lists')->select(DB::raw(' sum(Harga) as Total_Harga'))
+            ->get();
+        $Taransaksi = DB::table('new_lists')->select('NamaBarang', DB::raw('count(Barcode) as user_count, sum(Harga) as Harga'))->groupBy('Barcode')
+            ->get();
+        // dd($qrcode);
+        $tesaray = [
+            "TotalHarga" =>  $TotalHarga[0]->Total_Harga,
+            "Taransaksi" => $Taransaksi,
+        ];
         $res = [
             "massage" => "List Data",
-            'data' => $qrcode
+            'data' => $tesaray
         ];
 
         return response()->json($res, Response::HTTP_OK);
