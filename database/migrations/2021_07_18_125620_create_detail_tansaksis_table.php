@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateNewListsTable extends Migration
+class CreateDetailTansaksisTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,13 @@ class CreateNewListsTable extends Migration
      */
     public function up()
     {
-        Schema::create('new_lists', function (Blueprint $table) {
+        Schema::create('detail_tansaksis', function (Blueprint $table) {
             $table->id();
-            $table->string('IdNewList')->default('NewList');
+            $table->string('IdTransaksi');
             $table->string('Barcode');
-            $table->string("NamaBarang");
-            $table->double("Harga");
+            $table->string('NamaBarang');
+            $table->double('QTY');
+            $table->double('Harga');
             $table->timestamps();
         });
     }
@@ -30,6 +31,6 @@ class CreateNewListsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('new_lists');
+        Schema::dropIfExists('detail_tansaksis');
     }
 }

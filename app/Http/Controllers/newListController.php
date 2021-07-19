@@ -2,18 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\InputQRcode;
 use App\Models\newList;
-use App\Models\StokBarang;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
-use PHPUnit\Framework\Constraint\Count;
-use SebastianBergmann\CodeCoverage\Report\Xml\Totals;
 use Symfony\Component\HttpFoundation\Response;
 
-class QrCodeController extends Controller
+class newListController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -22,21 +17,7 @@ class QrCodeController extends Controller
      */
     public function index()
     {
-        $TotalHarga = DB::table('new_lists')->select(DB::raw(' sum(Harga) as Total_Harga'))
-            ->get();
-        $Taransaksi = DB::table('new_lists')->select('BarCode', 'NamaBarang', DB::raw('count(Barcode) as QTY, sum(Harga) as Harga'))->groupBy('Barcode')
-            ->get();
-        // dd($qrcode);
-        $tesaray = [
-            "TotalHarga" =>  $TotalHarga[0]->Total_Harga,
-            "Taransaksi" => $Taransaksi,
-        ];
-        $res = [
-            "massage" => "List Data",
-            'data' => $tesaray
-        ];
-
-        return response()->json($res, Response::HTTP_OK);
+        //
     }
 
     /**
@@ -57,23 +38,17 @@ class QrCodeController extends Controller
      */
     public function store(Request $request)
     {
-        // dd($request->all());
-        // foreach ($request->QRCODE as $value) {
-        //     // dd($value);
-        //     $QR = array("qrcode" => $value['qrcode']);
-        //     $qrcode = InputQRcode::create($QR);
-        //     //throw $th;
-        // }
-
         $vallidator = Validator::make($request->all(), [
-            'qrcode.*' => ['required'],
+            'Barcode' => ['required'],
+            'NamaBarang' => ['required'],
+            'Harga' => ['required'],
         ]);
         if ($vallidator->fails()) {
             return response()->json($vallidator->errors(), Response::HTTP_UNPROCESSABLE_ENTITY);
             # code...
         }
         try {
-            $qrcode = InputQRcode::create($request->all());
+            $qrcode = newList::create($request->all());
             $response = [
                 'massage' => "Success",
                 "data" => $qrcode
@@ -81,7 +56,7 @@ class QrCodeController extends Controller
             return response()->json($response, Response::HTTP_CREATED);
         } catch (QueryException $e) {
             return response()->json([
-                // 'massege' => "Failed" . $e->errorInfo
+                'massege' => "Failed" . $e->errorInfo
             ]);
         }
     }
@@ -92,15 +67,9 @@ class QrCodeController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($BarCode)
+    public function show($id)
     {
         //
-        $Taransaksi = StokBarang::where('BarCode', $BarCode)->first();
-        $res = [
-            'massage' => 'Data Ditemukan',
-            'Data' => $Taransaksi
-        ];
-        return response()->json($res, Response::HTTP_OK);
     }
 
     /**

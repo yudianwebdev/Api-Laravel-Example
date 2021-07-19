@@ -5,8 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class newList extends Model
+class DetailTansaksi extends Model
 {
     use HasFactory;
-    protected $fillable = ["Barcode", "NamaBarang", "Harga"];
+    protected $fillable = ["IdTransaksi", "Barcode", "NamaBarang", "QTY", "Harga"];
 }
