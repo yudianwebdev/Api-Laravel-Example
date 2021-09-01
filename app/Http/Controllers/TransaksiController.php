@@ -59,9 +59,10 @@ class TransaksiController extends Controller
                     'Harga' => $value['Harga']
                 ]);
             }
-            // $Taransaksi = newList::deleted('IdNewList', 'NewList');
+            $Tarans = newList::truncate();
             // $Taransaksi::D
             try {
+                $Tarans->delete();
                 $response = [
                     'massage' => "Success",
                     "data" => [

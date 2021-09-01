@@ -16,6 +16,7 @@ class CreateInputQRcodesTable extends Migration
         Schema::create('input_q_rcodes', function (Blueprint $table) {
             $table->id();
             $table->string('qrcode');
+            $table->integer('qty')->default(1);
             $table->timestamp("time")->default(now());
             $table->timestamps();
         });

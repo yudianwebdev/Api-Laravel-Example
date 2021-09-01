@@ -4,6 +4,7 @@ use App\Http\Controllers\newListController;
 use App\Http\Controllers\QrCodeController;
 use App\Http\Controllers\stokBarangController;
 use App\Http\Controllers\TransaksiController;
+use App\Models\StokBarang;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -28,4 +29,5 @@ Route::post('/StokBarang', [stokBarangController::class, 'store']);
 Route::post('/listTransaksi', [newListController::class, 'store']);
 Route::get('/qrcode/{BarCode}', [QrCodeController::class, 'show']);
 
+Route::get('/cekharga/{BarCode}', [stokBarangController::class, 'show']);
 Route::post('/Transaksi', [TransaksiController::class, 'store']);

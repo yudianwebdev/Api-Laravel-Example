@@ -8,5 +8,5 @@ use Illuminate\Database\Eloquent\Model;
 class newList extends Model
 {
     use HasFactory;
-    protected $fillable = ["Barcode", "NamaBarang", "Harga"];
+    protected $fillable = ["Barcode", "NamaBarang", "qty", "Harga"];
 }

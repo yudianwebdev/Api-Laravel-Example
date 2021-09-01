@@ -73,9 +73,15 @@ class stokBarangController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($BarCode)
     {
         //
+        $Taransaksi = StokBarang::where('BarCode', $BarCode)->first();
+        $res = [
+            'massage' => 'Data Ditemukan',
+            'Data' => $Taransaksi
+        ];
+        return response()->json($res, Response::HTTP_OK);
     }
 
     /**

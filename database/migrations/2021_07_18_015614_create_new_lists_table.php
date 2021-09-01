@@ -18,6 +18,7 @@ class CreateNewListsTable extends Migration
             $table->string('IdNewList')->default('NewList');
             $table->string('Barcode');
             $table->string("NamaBarang");
+            $table->integer("qty")->default(1);
             $table->double("Harga");
             $table->timestamps();
         });

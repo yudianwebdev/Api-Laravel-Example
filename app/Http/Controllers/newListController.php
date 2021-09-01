@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\newList;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -78,9 +79,12 @@ class newListController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit($BarCode)
     {
-        //
+        //        
+        $Taransaksi = DB::table('stok_barangs')->select('HargaSatuan')->where('BarCode', '=', $BarCode)
+            ->get();
+        $Hargasatuan = $Taransaksi[0]->HargaSatuan;
     }
 
     /**

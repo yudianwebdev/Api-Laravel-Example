@@ -24,7 +24,7 @@ class QrCodeController extends Controller
     {
         $TotalHarga = DB::table('new_lists')->select(DB::raw(' sum(Harga) as Total_Harga'))
             ->get();
-        $Taransaksi = DB::table('new_lists')->select('BarCode', 'NamaBarang', DB::raw('count(Barcode) as QTY, sum(Harga) as Harga'))->groupBy('Barcode')
+        $Taransaksi = DB::table('new_lists')->join('stok_barangs', 'stok_barangs.BarCode', '=', 'new_lists.Barcode')->select('stok_barangs.BarCode', 'stok_barangs.NamaBarang', 'stok_barangs.HargaSatuan', DB::raw('count(new_lists.Barcode) as QTY, sum(new_lists.Harga) as Harga'))->groupBy('new_lists.Barcode')
             ->get();
         // dd($qrcode);
         $tesaray = [
