@@ -72,18 +72,29 @@ class QrCodeController extends Controller
             return response()->json($vallidator->errors(), Response::HTTP_UNPROCESSABLE_ENTITY);
             # code...
         }
-        try {
-            $qrcode = InputQRcode::create($request->all());
+
+        
+        $qr = StokBarang::where('BarCode', $request->qrcode)->first();
+        $qrcode = $qr;
+        // dd($qr->BarCode);
+        if ($request->qrcode == $qr->BarCode){
+
+            $qrcode = InputQRcode::firstOrCreate([
+                'qrcode' => $request->qrcode
+            ]);
+            $qrcode->decrement('qty',5);
+            $qrcode->save();
             $response = [
                 'massage' => "Success",
                 "data" => $qrcode
             ];
             return response()->json($response, Response::HTTP_CREATED);
-        } catch (QueryException $e) {
-            return response()->json([
-                // 'massege' => "Failed" . $e->errorInfo
-            ]);
         }
+        else {
+            # code...
+            dd("tidak terbaca");
+        }
+       
     }
 
     /**

@@ -19,7 +19,6 @@ class CreateStokBarangsTable extends Migration
             $table->string("NamaBarang");
             $table->double("StokBarang");
             $table->integer("HargaSatuan");
-            $table->string("Cobacoba");
             $table->timestamps();
         });
     }
