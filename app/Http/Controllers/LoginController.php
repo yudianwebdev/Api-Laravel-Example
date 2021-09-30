@@ -37,29 +37,45 @@ class LoginController extends Controller
      */
 
      public function autenticete(Request $request){
-        $request->validate([
-            'email' => 'required|string|email',
-            'password' => 'required|string',
-            'remember_me' => 'boolean'
+        $vallidator = Validator::make($request->all(), [
+            'email' => ['required','email:dns',], 
+            'password' => ['required',"min:6"], 
         ]);
-        $credentials = request(['email', 'password']);
+        if ($vallidator->fails()) {
+            $res =[
+                'code'=>422,
+                'massage'=>"error validation",
+                'data'=>$vallidator->errors(),
+            ];
+            return response()->json($res, Response::HTTP_UNPROCESSABLE_ENTITY);
+            # code...
+        }
+        try {
+            //code...
+            $credentials = request(['email', 'password']);
         if(!Auth::attempt($credentials))
-            return response()->json([
+        
+            return response()->json([           'code'=>Response::HTTP_UNAUTHORIZED,
                 'message' => 'Unauthorized'
-            ], 401);
+            ], Response::HTTP_UNAUTHORIZED);
         $user = $request->user();
         $tokenResult = $user->createToken('Personal Access Token');
         $token = $tokenResult->token;
         if ($request->remember_me)
             $token->expires_at = Carbon::now()->addWeeks(1);
         $token->save();
-        return response()->json([
-            'access_token' => $tokenResult->accessToken,
-            'token_type' => 'Bearer',
-            'expires_at' => Carbon::parse(
-                $tokenResult->token->expires_at
-            )->toDateTimeString()
-        ]);
+        $res =[
+            'code'=>Response::HTTP_OK,            
+            'token' => $tokenResult->accessToken,
+            'token_type' => 'Bearer'
+        ];
+        return response()->json($res, Response::HTTP_OK);
+        } catch (QueryException $e) {
+            return response()->json([
+                'massege' => "Failed" . $e->errorInfo
+            ]);
+        }
+        
      }
 
     public function store(Request $request)
@@ -86,6 +102,7 @@ class LoginController extends Controller
                 'password'=> Hash::make($request->password)
             ]);
             $response = [
+                'code'=>Response::HTTP_CREATED,
                 'massage' => "Success",
                 "data" => $user
             ];
